@@ -18,14 +18,20 @@ app.get('/download', (req, res) => {
                 </html>`;
     //TODO: file name date time
     fs.writeFile('myFile.html', data, err => {
-        if (err)  console.log(err);
-        let html = fs.readFileSync('myFile.html', 'utf8');
-        pdf.create(html).toFile('myFile.pdf', (err, info) => {
-            if (err) console.log(err);
-            res.download(info.filename, info.filename, err => {
-                if (err) console.log(err);
+        if (err) { 
+            console.log(err);
+        } else {
+            let html = fs.readFileSync('myFile.html', 'utf8');
+            pdf.create(html).toFile('myFile.pdf', (err, info) => {
+                if (err) { 
+                    console.log(err);
+                } else {
+                    res.download(info.filename, info.filename, err => {
+                        if (err) console.log(err);
+                    });
+                }
             });
-        })
+        }
     });
 });
 
