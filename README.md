@@ -1,4 +1,4 @@
-# Realtime Markdown Editor
+# PDF Creator using Markdown
 
 ### What is this?
 
@@ -13,6 +13,6 @@ Go to the website "path to app" and just start creating markdown. When you are d
 This website uses the following to work:
 
  - [Express.js](https://nodejs.org/) - backend framework 
- - [html-pdf](https://www.npmjs.com/package/html-pdf) - converts html to pdf
+ - [Html to Pdf](https://www.npmjs.com/package/html-pdf) - converts html to pdf
  - [Markdown](https://github.com/showdownjs/showdown) - converts markdown text to html
  - [Twitter Bootstrap](http://getbootstrap.com/) - css styles
