@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 
-var app = http.createServer(hendler);
+var app = http.createServer(handler);
 
 app.listen(8000, () => { console.log('listening on 8000') });
 
@@ -17,7 +17,8 @@ function handler (req, res) {
     }
 
     if (req.url.indexOf('/download') !== -1 && req.method === 'GET') {
-
+        res.writeHead(200);
+        res.end('download file');
     }
 }
 
