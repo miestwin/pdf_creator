@@ -18,25 +18,16 @@ app.get('/download', (req, res) => {
                 </html>`;
     //TODO: file name date time
     fs.writeFile('myFile.html', data, err => {
-        if (err)  throw err;
-        console.log('Is\'s saved!');
-
+        if (err)  console.log(err);
         let html = fs.readFileSync('myFile.html', 'utf8');
-        pdf.create(html).toFile('myFile.pdf', (err, res) => {
+        pdf.create(html).toFile('myFile.pdf', (err, info) => {
             if (err) console.log(err);
-            console.log(res);
-
-
+            res.download(info.filename, info.filename, err => {
+                if (err) console.log(err);
+            });
         })
     });
 });
 
 var port = process.env.PORT || 8000;
 app.listen(port, () => { console.log(`listening on ${port}`); });
-
-// var url = require('url');
-// function handler (req, res) {
-//     if (req.url.indexOf('/download') !== -1 && req.method === 'GET') {
-//        console.log(url.parse(req.url, true).query);
-//     }
-// }
