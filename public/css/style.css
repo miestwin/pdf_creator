@@ -46,13 +46,13 @@ p {
     width: 100vw;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 800px) {
 
-    form #container textarea {
+    #container textarea {
         flex: 1;
     }
 
-    form #container #markdown {
+    #container #markdown {
         display: none;
     }
 }

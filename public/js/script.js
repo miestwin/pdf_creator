@@ -11,5 +11,11 @@ function handler () {
         markdownArea.innerHTML = converter.makeHtml(pad.value);
     }
 
+    const handleDownload = event => {
+        const content = encodeURI(markdownArea.innerHTML);
+        fetch(`http://localhost:8000/download?content=${content}`).then(()=>{console.log('działa');}).catch(err => {console.log(err);});
+    }
+
     pad.addEventListener('input', convertTextAreaToMarkdown);
+    download.addEventListener('click', handleDownload);
 }
