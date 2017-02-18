@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.14.1",
     "markdown-pdf": "7.0.0"
   }
 }
