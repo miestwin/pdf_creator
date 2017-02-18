@@ -6,7 +6,7 @@
 
 body {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -37,6 +37,7 @@ form #container textarea {
 form #container #markdown {
     flex: 2;
     border-left: 1px solid #bfbfbf;
+    padding: 10px 30px;
 }
 
 form button {
