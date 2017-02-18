@@ -9,7 +9,10 @@
     <body>
         <p>Write text using <strong>Markdown</strong> and click <strong>DOWNLOAD</strong> to get pdf file.</p>
         <form action="/download" method="GET">
-            <textarea id="pdf" name="pdf"></textarea>
+            <div id="container">
+                <textarea id="pdf" name="pdf"></textarea>
+                <div id="markdown"></div>
+            </div>
             <button type="submit">DOWNLOAD</button>
         </form>
     </body>
