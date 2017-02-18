@@ -12,60 +12,53 @@ app.get('/', (req, res) => {
 });
 
 app.get('/download', (req, res) => {
-
+    createHtmlAndConvertToPdf(req.query.content, res);
+});
+//TODO readFileSync, writeFileSync, createPdf, remove all files in directory
+function createHtmlAndConvertToPdf (content, res) {
     const bootstrap = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css";
     const options = {
         "format": "A4",
         "border": "10mm"
     };
-
     const min = 100;
     const max = 10000;
-
     const data = `<!doctype html><html><head><link rel="stylesheet" href="${bootstrap}"></head>
-                <body>${req.query.content}</body></html>`;
-
+                <body>${content}</body></html>`;
     const pathToFile = `${__dirname}/temp/${Math.floor(Math.random() * (max - min + 1)) + min}`;
     const pathToHtmlFile = `${pathToFile}.html`;
     const pathToPdfFile = `${pathToFile}.pdf`; 
 
-    createHtmlAndConvertToPdf(pathToHtmlFile, pathToPdfFile, data, options, res);
-});
+    createFile(pathToHtmlFile, pathToPdfFile, data, options, res);
+}
 
-//pyramid of doom
-function createHtmlAndConvertToPdf(pathToHtmlFile, pathToPdfFile, content, options, res) {
-    
-    fs.writeFile(pathToHtmlFile, content, (err) => {
-        if (err) {
-            console.log(err);
-        } else {
-
-            fs.readFile(pathToHtmlFile, 'utf8', (err, data) => {
-                if (err) {
-                    console.log(err);
-                } else {
-
-                    pdf.create(data,options).toFile(pathToPdfFile, (err, info) => {
-                        if (err) {
-                            console.log(err);
-                        } else {
-
-                            res.download(info.filename, info.filename, err => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-
-                                    removeFile(info.filename);
-                                    removeFile(pathToHtmlFile);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
+function createFile (pathToHtmlFile, pathToPdfFile, data, options, res) {
+    fs.writeFile(pathToHtmlFile, data, (err) => {
+        if (err) console.log(err);
+        readFile(pathToHtmlFile, pathToPdfFile, options, res);
     });
+}
 
+function readFile (pathToHtmlFile, pathToPdfFile, options, res) {
+    fs.readFile(pathToHtmlFile, 'utf8', (err, data) => {
+        if (err) console.log(err);
+        createPdf(pathToHtmlFile, pathToPdfFile, data, options, res);
+    });
+}
+
+function createPdf (pathToHtmlFile, pathToPdfFile, data, options, res) {
+    pdf.create(data, options).toFile(pathToPdfFile, (err, data) => {
+        if (err) console.log(err);
+        downloadFile(pathToHtmlFile, data.filename, res);
+    });
+}
+
+function downloadFile (pathToHtmlFile, pathToPdfFile, res) {
+    res.download(pathToPdfFile, pathToPdfFile, err => {
+        if (err) console.log(err);
+        removeFile(pathToHtmlFile);
+        removeFile(pathToPdfFile);
+    });
 }
 
 function removeFile(pathToFile) {
