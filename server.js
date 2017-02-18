@@ -13,22 +13,35 @@ app.get('/download', (req, res) => {
     let bootstrap = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css";
     let data = `<!doctype html>
                 <html>
-                <head><link rel="stylesheet" href="${bootstrap}"</head>
+                <head><link rel="stylesheet" href="${bootstrap}"></head>
                 <body>${req.query.content}</body>
                 </html>`;
+    let options = {
+        "format": "A4",
+        "border": "10mm"
+    };
     //TODO: file name date time
-    fs.writeFile('myFile.html', data, err => {
-        if (err)  throw err;
-        console.log('Is\'s saved!');
-
-        let html = fs.readFileSync('myFile.html', 'utf8');
-        pdf.create(html).toFile('myFile.pdf', (err, res) => {
-            if (err) console.log(err);
-            console.log(res);
-
-
-        })
+    //fs.writeFileSync('myFile.html', data);
+    //let html = fs.readFileSync('myFile.html', 'utf8');
+    // pdf.create(html, options).toFile('myFile.pdf', (err, info) => {
+    //     if (err) res.end('File not create');
+    //     res.download(__dirname + '/myFile.pdf');
+    // });
+    res.download(__dirname + '/myFile.pdf', 'myFile.pdf', (err) => {
+        if (err) {
+            console.log(err);
+        }
     });
+    // fs.writeFile('myFile.html', data, err => {
+    //     if (err)  throw err;
+    //     console.log('Is\'s saved!');
+
+    //     let html = fs.readFileSync('myFile.html', 'utf8');
+    //     pdf.create(html).toFile('myFile.pdf', (err, res) => {
+    //         if (err) console.log(err);
+    //         console.log(res);
+    //     })
+    // });
 });
 
 var port = process.env.PORT || 8000;

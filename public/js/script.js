@@ -13,7 +13,7 @@ function handler () {
 
     const handleDownload = event => {
         const content = encodeURI(markdownArea.innerHTML);
-        fetch(`http://localhost:8000/download?content=${content}`).then(()=>{console.log('działa');}).catch(err => {console.log(err);});
+        fetch(`http://localhost:8000/download?content=${content}`);
     }
 
     pad.addEventListener('input', convertTextAreaToMarkdown);
