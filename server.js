@@ -21,35 +21,24 @@ app.get('/download', (req, res) => {
         "border": "10mm"
     };
     //TODO: file name date time
-    //fs.writeFileSync('myFile.html', data);
-    //let html = fs.readFileSync('myFile.html', 'utf8');
-    // pdf.create(html, options).toFile('myFile.pdf', (err, info) => {
-    //     if (err) res.end('File not create');
-    //     res.download(__dirname + '/myFile.pdf');
-    // });
-    res.download(__dirname + '/myFile.pdf', 'myFile.pdf', (err) => {
-        if (err) {
+
+    fs.writeFile('myFile.html', data, err => {
+        if (err) { 
             console.log(err);
+        } else {
+            let html = fs.readFileSync('myFile.html', 'utf8');
+            pdf.create(html, options).toFile('myFile.pdf', (err, info) => {
+                if (err) { 
+                    console.log(err);
+                } else {
+                    res.download(info.filename, info.filename, err => {
+                        if (err) console.log(err);
+                    });
+                }
+            });
         }
     });
-    // fs.writeFile('myFile.html', data, err => {
-    //     if (err)  throw err;
-    //     console.log('Is\'s saved!');
-
-    //     let html = fs.readFileSync('myFile.html', 'utf8');
-    //     pdf.create(html).toFile('myFile.pdf', (err, res) => {
-    //         if (err) console.log(err);
-    //         console.log(res);
-    //     })
-    // });
 });
 
 var port = process.env.PORT || 8000;
 app.listen(port, () => { console.log(`listening on ${port}`); });
-
-// var url = require('url');
-// function handler (req, res) {
-//     if (req.url.indexOf('/download') !== -1 && req.method === 'GET') {
-//        console.log(url.parse(req.url, true).query);
-//     }
-// }
