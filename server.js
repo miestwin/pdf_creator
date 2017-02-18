@@ -11,16 +11,13 @@ app.get('/', (req, res) => {
 
 app.get('/download', (req, res) => {
     let bootstrap = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css";
-    let data = `<!doctype html>
-                <html>
-                <head><link rel="stylesheet" href="${bootstrap}"></head>
-                <body>${req.query.content}</body>
-                </html>`;
+    let data = `<!doctype html><html><head><link rel="stylesheet" href="${bootstrap}"></head>
+                <body>${req.query.content}</body></html>`;
     let options = {
         "format": "A4",
         "border": "10mm"
     };
-    //TODO: file name date time
+    
 
     fs.writeFile('myFile.html', data, err => {
         if (err) { 
@@ -33,6 +30,12 @@ app.get('/download', (req, res) => {
                 } else {
                     res.download(info.filename, info.filename, err => {
                         if (err) console.log(err);
+                        fs.unlink(info.filename, err => {
+                            if (err) console.log(err);
+                        });
+                        fs.unlink(__dirname + '/myFile.html', err => {
+                            if (err) console.log(err);
+                        });
                     });
                 }
             });
