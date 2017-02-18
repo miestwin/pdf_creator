@@ -9,12 +9,11 @@
     </head>
     <body>
         <p>Write text using <strong>Markdown</strong> and click <strong>DOWNLOAD</strong> to get pdf file.</p>
-        <form action="/download" method="GET">
-            <div id="container">
-                <textarea id="pad" name="pad"></textarea>
-                <div id="markdown"></div>
-            </div>
-            <button type="submit">DOWNLOAD</button>
+        <div id="container">
+            <textarea id="pad" name="pad"></textarea>
+            <div id="markdown"></div>
+        </div>
+        <button id="download">DOWNLOAD</button>
         </form>
         <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
         <script src="js/script.js"></script>

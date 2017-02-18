@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', handler);
 function handler () {
 
     const converter = new showdown.Converter();
+    const download = document.getElementById('download');
     const pad = document.getElementById('pad');
     let markdownArea = document.getElementById('markdown');
 
