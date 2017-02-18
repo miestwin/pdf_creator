@@ -1,36 +1,31 @@
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
+var express = require('express');
+var app = express();
 
-var app = http.createServer(handler);
+app.use(express.static(__dirname + '/public'));
 
-app.listen(8000, () => { console.log('listening on 8000') });
+app.get('/', (req, res) => {
+    res.render('index.html');
+});
 
-function handler (req, res) {
-    
-    if (req.url === '/' && req.method === 'GET') {
-        sendFile(__dirname + '/public/index.html', res);
-    }
+app.get('/download', (req, res) => {
+    //TODO: download file
+});
 
-    if ((req.url.indexOf('.js') !== -1 || req.url.indexOf('.css') !== -1) && req.method === 'GET') {
-        sendFile(__dirname + '/public' + req.url, res);
-    }
+var port = process.env.PORT || 8000;
+app.listen(port, () => { console.log(`listening on ${port}`); });
 
-    if (req.url.indexOf('/download') !== -1 && req.method === 'GET') {
-        res.writeHead(200);
-        res.end('download file');
-    }
-}
 
-function sendFile (path, res) {
-    fs.readFile (path, (err, data) => {
-        
-        if (err) {
-            res.writeHead(500);
-            res.end('Internal server error');
-        }
 
-        res.writeHead(200);
-        res.end(data);
-    });
-}
+// var fs = require('fs');
+// var url = require('url');
+
+// function handler (req, res) {
+//     if (req.url.indexOf('/download') !== -1 && req.method === 'GET') {
+//         createPdfFile(parseURL(req.url), res);
+//     }
+// }
+
+
+// function parseURL(path) {
+//     return url.parse(path, true).query;
+// }
