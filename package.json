@@ -16,7 +16,5 @@
   "dependencies": {
     "express": "4.14.1",
     "html-pdf": "2.1.0"
-  },
-  "devDependencies": {
   }
 }
