@@ -14,8 +14,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/download', (req, res) => {
-    generateData(req.query.content)
+    createFile(generateData(req.query.content))
+        .then(readFile)
+        .then(createPdf)
         .then(response => {
+            res.status(201);
             res.download(response.path_to_pdf_file, response.path_to_pdf_file, (err) => {
                 if (err) Promise.reject(err);
                 if (removeFile(response.path_to_html_file)) Promise.reject(new Error(`Unable to remove ${response.path_to_html_file}`));
@@ -24,6 +27,7 @@ app.get('/download', (req, res) => {
         })
         .catch(err => {
             console.log(err);
+            res.status(500).send({error: 'Internal server error happened'});
         });
 });
 
@@ -39,17 +43,13 @@ function generateData (content) {
         "format": "A4",
         "border": "10mm"
     };
+    
     data.file_content = `<!doctype html><html><head><link rel="stylesheet" href="${bootstrap}"></head>
                 <body>${content}</body></html>`;
     data.path_to_html_file = `${pathToFile}.html`;
     data.path_to_pdf_file = `${pathToFile}.pdf`; 
 
-    return createFile(data)
-            .then(readFile)
-            .then(createPdf)
-            .catch(err => {
-                return Promise.reject(err);
-            });
+    return data;
 }
 
 function createFile (response) {
