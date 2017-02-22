@@ -13,6 +13,6 @@ Go to the website "path to app" and just start creating markdown. When you are d
 This website uses the following to work:
 
  - [Express.js](https://nodejs.org/) - backend framework 
- - [Html to Pdf](https://www.npmjs.com/package/html-pdf) - converts html to pdf
+ - [Markdown to Pdf](https://www.npmjs.com/package/markdown-pdf) - converts md to pdf
  - [Markdown](https://github.com/showdownjs/showdown) - converts markdown text to html
  - [Twitter Bootstrap](http://getbootstrap.com/) - css styles
