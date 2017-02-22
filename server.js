@@ -17,11 +17,11 @@ app.get('/download', (req, res) => {
     createFile(generateData(req.query))
     .then(createPdf)
     .then(response => {
-        res.status(201);
-        res.download(response.path_to_pdf_file, response.path_to_pdf_file, (err) => {
+        //res.status(201);
+        res.download(changeFormat(response.path, 'pdf'), changeFormat(response.path, 'pdf'), (err) => {
             if (err) Promise.reject(err);
-            if (removeFile(response.path)) Promise.reject(new Error(`Unable to remove ${response.path_to_markdown_file}`));
-            if (removeFile(`${response.path.slice(0, response.path.lastIndexOf('.'))}.pdf`)) Promise.reject(new Error(`Unable to remove ${response.path_to_markdown_file}`));
+            if (removeFile(response.path)) Promise.reject(new Error(`Unable to remove file`));
+            if (removeFile(changeFormat(response.path, 'pdf'))) Promise.reject(new Error(`Unable to remove file`));
         });
     })
     .catch(err => {
@@ -70,7 +70,7 @@ const createFile = response => {
 */
 const createPdf = response => {
     return new Promise((resolve, reject) => {
-        pdf(response.options).from(response.path).to(`${response.path.slice(0, response.path.lastIndexOf('.'))}.pdf`, () => {
+        pdf(response.options).from(response.path).to(changeFormat(response.path, 'pdf'), () => {
             resolve(response);
         });
     });
@@ -86,6 +86,6 @@ const removeFile = path => {
     });
 }
 
-//const changePath = path => `${path.slice(0, path.lastIndexOf('.'))}.pdf`
+const changeFormat = (path, format) => `${path.slice(0, path.lastIndexOf('.'))}.${format}`
 
 app.listen(port, () => { console.log(`listening on ${port}`); });
