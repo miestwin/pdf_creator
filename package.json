@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Write markdown and create pdf file",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "inspect": "node --inspect server.js"
   },
   "repository": {
     "type": "git",

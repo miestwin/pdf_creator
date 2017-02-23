@@ -7,32 +7,33 @@ var port = process.env.PORT || 8000;
 
 app.use(express.static(__dirname + '/public'));
 
-
-//routes
 app.get('/', (req, res) => {
     res.render('index.html');
 });
-//TODO: remove file, prepare for heroku
+
 app.get('/download', (req, res) => {
     createFile(generateData(req.query))
     .then(createPdf)
     .then(response => {
-        //res.status(201);
         res.download(changeFormat(response.path, 'pdf'), changeFormat(response.path, 'pdf'), (err) => {
             if (err) Promise.reject(err);
-            if (removeFile(response.path)) Promise.reject(new Error(`Unable to remove file`));
-            if (removeFile(changeFormat(response.path, 'pdf'))) Promise.reject(new Error(`Unable to remove file`));
+            err = removeFile(response.path);
+            if (err) console.log(err);
+            err = removeFile(changeFormat(response.path, 'pdf'));
+            if (err) console.log(err);
         });
     })
     .catch(err => {
         console.log(err);
-        res.status(500).send({error: 'Internal server error happened'});
+        //202 The request has been accepted for processing, but the processing has not been completed.
+        res.status(202).send({error: err});
     });
 });
 
-/*
-    Generate data based on query
-*/
+app.get('*', (req, res) => {
+    res.status(404).send({message: 'Not Found'});
+});
+
 const generateData = query => {
     
     const min = 100;
@@ -50,16 +51,14 @@ const generateData = query => {
     return data;
 }
 
-/*
-    Create any file
-    Return Promise
-*/
 const createFile = response => {
     return new Promise((resolve, reject) => {
-        fs.writeFile(response.path, response.content, (err) => {
-            if (err) reject(err);
+        try {
+            fs.writeFileSync(response.path, response.content);
             resolve(response);
-        });
+        } catch(e) {
+            reject(e);
+        }
     });
 }
 
@@ -76,13 +75,11 @@ const createPdf = response => {
     });
 }
 
-/*
-    Remove file
-*/
 const removeFile = path => {
-    fs.unlink(path, err => { 
+    fs.unlink(path, (err) => { 
         if (err) return err;
-        return null; 
+        console.log(`Remove file ${path}`);
+        return null;
     });
 }
 
