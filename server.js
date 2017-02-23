@@ -17,10 +17,8 @@ app.get('/download', (req, res) => {
     .then(response => {
         res.download(changeFormat(response.path, 'pdf'), changeFormat(response.path, 'pdf'), (err) => {
             if (err) Promise.reject(err);
-            err = removeFile(response.path);
-            if (err) console.log(err);
-            err = removeFile(changeFormat(response.path, 'pdf'));
-            if (err) console.log(err);
+            removeFile(response.path);
+            removeFile(changeFormat(response.path, 'pdf'));
         });
     })
     .catch(err => {
@@ -77,9 +75,11 @@ const createPdf = response => {
 
 const removeFile = path => {
     fs.unlink(path, (err) => { 
-        if (err) return err;
-        console.log(`Remove file ${path}`);
-        return null;
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(`Remove file ${path}`);
+        }
     });
 }
 
