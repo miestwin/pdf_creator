@@ -52,7 +52,7 @@ app.get('*', (req, res) => {
     res.status(404).send({message: NOT_FOUND_MSG});
 });
 
-const generateData = query => {
+function generateData (query) {
     const MIN = 100;
     const MAX = 10000;
     let data = {};
@@ -67,7 +67,7 @@ const generateData = query => {
     return data;
 }
 
-const createFile = response => {
+function createFile (response) {
     return new Promise((resolve, reject) => {
         try {
             fs.writeFileSync(response.path, response.content);
@@ -84,7 +84,7 @@ const createFile = response => {
     Return Promise
     pdf([options to convert]).from([path to md file]).to([path to pdf file], callback)
 */
-const createPdf = response => {
+function createPdf (response) {
     return new Promise((resolve, reject) => {
         pdf(response.options).from(response.path).to(response.pathToPdf, () => {
             winston.log('info', `Create new file ${response.pathToPdf}`);
@@ -93,7 +93,7 @@ const createPdf = response => {
     });
 }
 
-const removeFile = path => {
+function removeFile (path) {
     fs.unlink(path, (err) => { 
         if (err) {
             winston.log('error', err);
@@ -103,6 +103,8 @@ const removeFile = path => {
     });
 }
 
-const changeFormat = (path, format) => `${path.slice(0, path.lastIndexOf('.'))}.${format}`
+function changeFormat (path, format) {
+    return `${path.slice(0, path.lastIndexOf('.'))}.${format}`;
+}
 
 app.listen(port, () => { winston.log('info', `listening on ${port}`); });
