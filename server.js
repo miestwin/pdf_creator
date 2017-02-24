@@ -85,7 +85,7 @@ const createFile = response => {
 const createPdf = response => {
     return new Promise((resolve, reject) => {
         pdf(response.options).from(response.path).to(response.pathToPdf, () => {
-            winston.log('info', `Create new file ${changeFormat(response.pathToPdf, 'pdf')}`);
+            winston.log('info', `Create new file ${response.pathToPdf}`);
             resolve(response);
         });
     });
