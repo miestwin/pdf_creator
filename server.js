@@ -1,9 +1,27 @@
-var fs = require('fs');
-var pdf = require('markdown-pdf');
-var express = require('express');
-var app = express();
+const fs = require('fs');
+const pdf = require('markdown-pdf');
+const winston = require('winston');
+const express = require('express');
+const app = express();
 
-var port = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
+winston.level = process.env.LOG_LEVEL || 'debug';
+
+winston.configure({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({
+            name: 'info-file',
+            filename: 'filelog-info.log',
+            level: 'info'
+        }),
+        new (winston.transports.File)({
+            name: 'error-file',
+            filename: 'filelog-error.log',
+            level: 'error'
+        })
+    ]
+});
 
 app.use(express.static(__dirname + '/public'));
 
@@ -16,13 +34,13 @@ app.get('/download', (req, res) => {
     .then(createPdf)
     .then(response => {
         res.download(changeFormat(response.path, 'pdf'), changeFormat(response.path, 'pdf'), (err) => {
-            if (err) Promise.reject(err);
+            if (err) winston.log('error', err);
             removeFile(response.path);
             removeFile(changeFormat(response.path, 'pdf'));
         });
     })
     .catch(err => {
-        console.log(err);
+        winston.log('error', err);
         //202 The request has been accepted for processing, but the processing has not been completed.
         res.status(202).send({error: err});
     });
@@ -33,10 +51,8 @@ app.get('*', (req, res) => {
 });
 
 const generateData = query => {
-    
     const min = 100;
     const max = 10000;
-
     let data = {};
     data.options = {
         cssPath: __dirname + '/node_modules/bootstrap/dist/css/bootstrap.min.css',
@@ -45,7 +61,6 @@ const generateData = query => {
     }; //options for markdown-pdf
     data.content = query.content; //file content
     data.path = `${__dirname}/temp/${Math.floor(Math.random() * (max - min + 1)) + min}.md`; //path to md file with random name
-
     return data;
 }
 
@@ -53,6 +68,7 @@ const createFile = response => {
     return new Promise((resolve, reject) => {
         try {
             fs.writeFileSync(response.path, response.content);
+            winston.log('info', `Create new file ${response.path}`);
             resolve(response);
         } catch(e) {
             reject(e);
@@ -68,6 +84,7 @@ const createFile = response => {
 const createPdf = response => {
     return new Promise((resolve, reject) => {
         pdf(response.options).from(response.path).to(changeFormat(response.path, 'pdf'), () => {
+            winston.log('info', `Create new file ${changeFormat(response.path, 'pdf')}`);
             resolve(response);
         });
     });
@@ -76,13 +93,13 @@ const createPdf = response => {
 const removeFile = path => {
     fs.unlink(path, (err) => { 
         if (err) {
-            console.log(err);
+            winston.log('error', err);
         } else {
-            console.log(`Remove file ${path}`);
+            winston.log('info', `Remove file ${path}`);
         }
     });
 }
 
 const changeFormat = (path, format) => `${path.slice(0, path.lastIndexOf('.'))}.${format}`
 
-app.listen(port, () => { console.log(`listening on ${port}`); });
+app.listen(port, () => { winston.log('info', `listening on ${port}`); });
