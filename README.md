@@ -6,7 +6,7 @@ Type your markdown into the box on the left and immediately see if on the box on
 
 ### How to use this?
 
-Go to the website "path to app" and just start creating markdown. When you are done just click "DOWNLOAD". 
+Go to the website "https://damp-retreat-98374.herokuapp.com/" and just start creating markdown. When you are done just click "DOWNLOAD". 
 
 ### How was this built?
 
