@@ -3,9 +3,6 @@
 ### What is this?
 
 Type your markdown into the box on the left and immediately see if on the box on the right. You can download the created file in pdf format.
-
-### How to use this?
-
 Go to the website "https://damp-retreat-98374.herokuapp.com/" and just start creating markdown. When you are done just click "DOWNLOAD". 
 
 ### How was this built?
