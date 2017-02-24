@@ -1,0 +1,5 @@
+{"level":"info","message":"listening on 8000","timestamp":"2017-02-24T13:42:20.717Z"}
+{"level":"info","message":"Create new file /home/miestwin/Projekty/pdf_creator/temp/9574.md","timestamp":"2017-02-24T13:42:27.820Z"}
+{"level":"info","message":"Create new file /home/miestwin/Projekty/pdf_creator/temp/9574.pdf","timestamp":"2017-02-24T13:42:29.922Z"}
+{"level":"info","message":"Remove file /home/miestwin/Projekty/pdf_creator/temp/9574.md","timestamp":"2017-02-24T13:42:29.931Z"}
+{"level":"info","message":"Remove file /home/miestwin/Projekty/pdf_creator/temp/9574.pdf","timestamp":"2017-02-24T13:42:29.931Z"}

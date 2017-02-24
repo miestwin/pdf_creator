@@ -4,6 +4,9 @@ const winston = require('winston');
 const express = require('express');
 const app = express();
 
+const NOT_FOUND_MSG = "Not Found";
+const PATH_TO_BOOTSTRAP = __dirname + '/node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 const port = process.env.PORT || 8000;
 winston.level = process.env.LOG_LEVEL || 'debug';
 
@@ -41,26 +44,25 @@ app.get('/download', (req, res) => {
     })
     .catch(err => {
         winston.log('error', err);
-        //202 The request has been accepted for processing, but the processing has not been completed.
-        res.status(202).send({error: err});
+        res.status(500).send({error: err});
     });
 });
 
 app.get('*', (req, res) => {
-    res.status(404).send({message: 'Not Found'});
+    res.status(404).send({message: NOT_FOUND_MSG});
 });
 
 const generateData = query => {
-    const min = 100;
-    const max = 10000;
+    const MIN = 100;
+    const MAX = 10000;
     let data = {};
     data.options = {
-        cssPath: __dirname + '/node_modules/bootstrap/dist/css/bootstrap.min.css',
+        cssPath: PATH_TO_BOOTSTRAP,
         paperFormat: 'A4',
         paperBorder: '1cm'
     }; //options for markdown-pdf
     data.content = query.content; //file content
-    data.path = `${__dirname}/temp/${Math.floor(Math.random() * (max - min + 1)) + min}.md`; //path to md file with random name
+    data.path = `${__dirname}/temp/${Math.floor(Math.random() * (MAX - MIN + 1)) + MIN}.md`; //path to md file with random name
     data.pathToPdf = changeFormat(data.path, 'pdf');
     return data;
 }
