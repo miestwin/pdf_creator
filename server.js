@@ -33,10 +33,10 @@ app.get('/download', (req, res) => {
     createFile(generateData(req.query))
     .then(createPdf)
     .then(response => {
-        res.download(changeFormat(response.path, 'pdf'), changeFormat(response.path, 'pdf'), (err) => {
+        res.download(response.pathToPdf, response.pathToPdf, (err) => {
             if (err) winston.log('error', err);
             removeFile(response.path);
-            removeFile(changeFormat(response.path, 'pdf'));
+            removeFile(response.pathToPdf);
         });
     })
     .catch(err => {
@@ -61,6 +61,7 @@ const generateData = query => {
     }; //options for markdown-pdf
     data.content = query.content; //file content
     data.path = `${__dirname}/temp/${Math.floor(Math.random() * (max - min + 1)) + min}.md`; //path to md file with random name
+    data.pathToPdf = changeFormat(data.path, 'pdf');
     return data;
 }
 
@@ -83,8 +84,8 @@ const createFile = response => {
 */
 const createPdf = response => {
     return new Promise((resolve, reject) => {
-        pdf(response.options).from(response.path).to(changeFormat(response.path, 'pdf'), () => {
-            winston.log('info', `Create new file ${changeFormat(response.path, 'pdf')}`);
+        pdf(response.options).from(response.path).to(response.pathToPdf, () => {
+            winston.log('info', `Create new file ${changeFormat(response.pathToPdf, 'pdf')}`);
             resolve(response);
         });
     });
